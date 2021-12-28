@@ -3,8 +3,12 @@ languageCode: en-us
 title: How To...
 theme: etch
 
+pygmentsCodeFences: true
+pygmentsUseClasses: true
+
 params:
   copyright: © 2021 Sunil Pandey
+  highlight: true
 
 menu:
   main:
