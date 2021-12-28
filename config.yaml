@@ -1,3 +1,23 @@
 baseURL: https://sunilbpandey.github.io/howto/
 languageCode: en-us
 title: How To...
+theme: etch
+
+params:
+  copyright: © 2021 Sunil Pandey
+
+menu:
+  main:
+  - identifier: posts
+    name: posts
+    title: posts
+    url: /
+    weight: 10
+  - identifier: tags
+    name: tags
+    title: tags
+    url: /tags
+    weight: 20
+
+permalinks:
+  posts: /posts/:title/
