@@ -2,6 +2,8 @@
 title: "Range function in JavaScript"
 date: 2021-12-31T13:38:42-08:00
 draft: false
+tags:
+- javascript
 ---
 JavaScript doesn't have a built-in equivalent of Python's [range](https://docs.python.org/3/library/functions.html#func-range) function. Although a _for_ loop isn't difficult to write, I occasionally miss the convenience of _range_.
 
