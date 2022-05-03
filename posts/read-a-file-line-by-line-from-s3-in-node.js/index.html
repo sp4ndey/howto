@@ -1,52 +1,18 @@
-<!doctype html><html><head>
-<meta charset=utf-8>
-<meta name=viewport content="width=device-width,initial-scale=1">
-<link rel="shortcut icon" href=https://sp4ndey.github.io/howto/favicon.ico>
-<link rel=stylesheet href=/howto/css/style.min.css>
-<title>Read a file line by line from S3 in Node.js</title>
-</head>
-<body><header id=banner>
-<h2><a href=https://sp4ndey.github.io/howto/>How To...</a></h2>
-<nav>
-<ul>
-<li>
-<a href=/howto/ title=posts>posts</a>
-</li><li>
-<a href=/howto/tags title=tags>tags</a>
-</li>
-</ul>
-</nav>
-</header>
-<main id=content>
-<article>
-<header id=post-header>
-<h1>Read a file line by line from S3 in Node.js</h1>
-<div>
-<time>January 7, 2022</time>
-</div>
-</header><p>I had to do this recently, and it&rsquo;s actually quite straightforward&mldr; once you know what to do.</p>
-<p>One problem I faced was that all the blogs and <a href=https://stackoverflow.com/>Stack Overflow</a> answers I found were about the <a href=https://aws.amazon.com/sdk-for-javascript/>AWS SDK</a> v2 and they don&rsquo;t work with v3. The following code has been tested with AWS SDK v3.45.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=kr>const</span> <span class=nx>AWS</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s2>&#34;@aws-sdk/client-s3&#34;</span><span class=p>);</span>
-<span class=kr>const</span> <span class=nx>readline</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s2>&#34;readline&#34;</span><span class=p>);</span>
-
-<span class=kr>const</span> <span class=nx>readFile</span> <span class=o>=</span> <span class=kr>async</span> <span class=p>(</span><span class=nx>bucket</span><span class=p>,</span> <span class=nx>filename</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
-    <span class=kr>const</span> <span class=nx>s3</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>AWS</span><span class=p>.</span><span class=nx>S3</span><span class=p>();</span>
-
-    <span class=kr>const</span> <span class=nx>file</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>s3</span><span class=p>.</span><span class=nx>getObject</span><span class=p>({</span>
-        <span class=nx>Bucket</span><span class=o>:</span> <span class=nx>bucket</span><span class=p>,</span>
-        <span class=nx>Key</span><span class=o>:</span> <span class=nx>filename</span>
-    <span class=p>});</span>
-
-    <span class=kr>const</span> <span class=nx>reader</span> <span class=o>=</span> <span class=nx>readline</span><span class=p>.</span><span class=nx>createInterface</span><span class=p>({</span> <span class=nx>input</span><span class=o>:</span> <span class=nx>file</span><span class=p>.</span><span class=nx>Body</span> <span class=p>});</span>
-
-    <span class=k>for</span> <span class=kr>await</span> <span class=p>(</span><span class=kr>const</span> <span class=nx>line</span> <span class=k>of</span> <span class=nx>reader</span><span class=p>)</span> <span class=p>{</span>
-        <span class=c1>// process each line
-</span><span class=c1></span>    <span class=p>}</span>
-<span class=p>}</span>
-</code></pre></div><p>see also: <a href=../write-a-file-to-s3-in-node.js/>Write a file to S3 in Node.js</a></p>
-</article>
-</main><footer id=footer>
-© 2021 Sunil Pandey
-</footer>
-</body>
-</html>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://sp4ndey.github.io/howto/favicon.ico><link rel=stylesheet href=/howto/css/style.min.css><title>Read a file line by line from S3 in Node.js</title></head><body><header id=banner><h2><a href=https://sp4ndey.github.io/howto/>How To...</a></h2><nav><ul><li><a href=/howto/ title=posts>posts</a></li><li><a href=/howto/tags title=tags>tags</a></li></ul></nav></header><main id=content><article><header id=post-header><h1>Read a file line by line from S3 in Node.js</h1><div><time>January 7, 2022</time></div></header><p>I had to do this recently, and it&rsquo;s actually quite straightforward&mldr; once you know what to do.</p><p>One problem I faced was that all the blogs and <a href=https://stackoverflow.com/>Stack Overflow</a> answers I found were about the <a href=https://aws.amazon.com/sdk-for-javascript/>AWS SDK</a> v2 and they don&rsquo;t work with v3. The following code has been tested with AWS SDK v3.45.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kr>const</span> <span class=nx>AWS</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s2>&#34;@aws-sdk/client-s3&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>readline</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s2>&#34;readline&#34;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>readFile</span> <span class=o>=</span> <span class=kr>async</span> <span class=p>(</span><span class=nx>bucket</span><span class=p>,</span> <span class=nx>filename</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>s3</span> <span class=o>=</span> <span class=k>new</span> <span class=nx>AWS</span><span class=p>.</span><span class=nx>S3</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>file</span> <span class=o>=</span> <span class=kr>await</span> <span class=nx>s3</span><span class=p>.</span><span class=nx>getObject</span><span class=p>({</span>
+</span></span><span class=line><span class=cl>        <span class=nx>Bucket</span><span class=o>:</span> <span class=nx>bucket</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=nx>Key</span><span class=o>:</span> <span class=nx>filename</span>
+</span></span><span class=line><span class=cl>    <span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=nx>reader</span> <span class=o>=</span> <span class=nx>readline</span><span class=p>.</span><span class=nx>createInterface</span><span class=p>({</span> <span class=nx>input</span><span class=o>:</span> <span class=nx>file</span><span class=p>.</span><span class=nx>Body</span> <span class=p>});</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=kr>await</span> <span class=p>(</span><span class=kr>const</span> <span class=nx>line</span> <span class=k>of</span> <span class=nx>reader</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// process each line
+</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>see also: <a href=../write-a-file-to-s3-in-node.js/>Write a file to S3 in Node.js</a></p></article></main><footer id=footer>© 2021 Sunil Pandey</footer></body></html>
