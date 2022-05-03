@@ -7,7 +7,7 @@ pygmentsCodeFences: true
 pygmentsUseClasses: true
 
 params:
-  copyright: © 2022 Sunil Pandey
+  copyright: © 2021 Sunil Pandey
   highlight: true
 
 menu:
