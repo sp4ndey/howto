@@ -9,6 +9,7 @@ pygmentsUseClasses: true
 params:
   copyright: © 2021 Sunil Pandey
   highlight: true
+  clarity_id: d6qfzorlb9
 
 menu:
   main:
