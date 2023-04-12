@@ -7,7 +7,7 @@ tags:
 ---
 This site was built using [Hugo](https://gohugo.io/). Adding a new post or page is very easy.
 
-## Step 1 - Install Hugo
+### Step 1 - Install Hugo
 
 On macOS, the simplest option is to use [Homebrew](https://gohugo.io/).
 ```bash
@@ -15,7 +15,7 @@ brew install hugo
 ```
 Detailed instructions for other platforms can be found [here](https://gohugo.io/getting-started/installing/).
 
-## Step 2 - Add a new post
+### Step 2 - Add a new post
 
 This post was created using the following command:
 ```bash
