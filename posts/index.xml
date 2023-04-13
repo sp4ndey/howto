@@ -1,4 +1,75 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on How To...</title><link>https://howto.pandey.me/posts/</link><description>Recent content in Posts on How To...</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 12 Apr 2023 10:58:05 -0700</lastBuildDate><atom:link href="https://howto.pandey.me/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Install a specific version of NPM</title><link>https://howto.pandey.me/posts/install-a-specific-version-of-npm/</link><pubDate>Wed, 12 Apr 2023 10:58:05 -0700</pubDate><guid>https://howto.pandey.me/posts/install-a-specific-version-of-npm/</guid><description>&lt;p>I use &lt;a href="https://nvm.sh">nvm&lt;/a> to manage &lt;a href="https://nodejs.org/en">Node.js&lt;/a> versions on my computer and I typically install the latest version of &lt;a href="https://docs.npmjs.com/cli">npm&lt;/a> that is compatible with the Node.js version. This is as simple as:&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on How To...</title><link>https://howto.pandey.me/posts/</link><description>Recent content in Posts on How To...</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 13 Apr 2023 10:45:32 -0700</lastBuildDate><atom:link href="https://howto.pandey.me/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Using Supervisor on macOS</title><link>https://howto.pandey.me/posts/using-supervisor-on-macos/</link><pubDate>Thu, 13 Apr 2023 10:45:32 -0700</pubDate><guid>https://howto.pandey.me/posts/using-supervisor-on-macos/</guid><description>&lt;p>When I&amp;rsquo;m working on a project, I often need to run a number of processes, e.g. a frontend app, several backend services, maybe a redis server etc. Instead of running them in Docker containers, or in separate terminal windows, I like to use &lt;a href="http://supervisord.org/">Supervisor&lt;/a>. Supervisor is a process control system on UNIX-like OSes, and is easy to use on macOS.&lt;/p>
+&lt;h3 id="installation">Installation&lt;/h3>
+&lt;p>The simplest option is to use &lt;a href="https://pypi.org/project/pip/">pip&lt;/a>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">pip3 install supervisor
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Other options for installation are available &lt;a href="http://supervisord.org/installing.html">here&lt;/a>.&lt;/p>
+&lt;h3 id="creating-a-configuration-file">Creating a Configuration File&lt;/h3>
+&lt;p>You can create a sample configuration file using &lt;code>echo_supervisord_conf&lt;/code>.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">echo_supervisord_conf &amp;gt; /path/to/supervisord.conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Customize the file as appropriate. I leave the default sections as-is, just add my programs:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-ini" data-lang="ini">&lt;span class="line">&lt;span class="cl">&lt;span class="k">[program:redis-server]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">command&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/path/to/redis-server&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">autostart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">false&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">autorestart&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">stdout_logfile&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/path/to/logs/redis-server.log&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="na">stderr_logfile&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">/path/to/logs/redis-server.err.log&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Finally, I like to create a symbolic link in &lt;code>/etc/&lt;/code> so supervisor can automatically find the file. This is not required, it just saves me from having to type the full path every time.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sudo ln -s /path/to/supervisord.conf /etc/supervisord.conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="running-supervisord">Running supervisord&lt;/h3>
+&lt;p>Now we are ready to start the server:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">supervisord
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>If you didn&amp;rsquo;t create a symlink in one of the default paths where supervisord searches for the config file, you can also specify the config path on the command line:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">supervisord -c /path/to/supervisord.conf
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="running-supervisorctl">Running supervisorctl&lt;/h3>
+&lt;p>You interact with supervisord using &lt;code>supervisorctl&lt;/code>:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ supervisorctl status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">redis-server STOPPED Not started
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Or if the config file is not in a standard location:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ supervisorctl -c /path/to/supervisord.conf status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">redis-server STOPPED Not started
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="managing-the-processes">Managing the processes&lt;/h4>
+&lt;p>You can a variety of commands with supervisorctl to manage the processes, including &lt;code>start&lt;/code>, &lt;code>stop&lt;/code>, &lt;code>restart&lt;/code>, &lt;code>status&lt;/code> and &lt;code>reload&lt;/code>. To get a full list of commands, type:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">supervisorctl &lt;span class="nb">help&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="creating-an-alias">Creating an alias&lt;/h3>
+&lt;p>Finally, I create a helper function to save myself a few keystrokes every time I need to start, stop or restart a process. Something like this:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sup&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">((&lt;/span> &lt;span class="nv">$#&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="m">0&lt;/span> &lt;span class="o">))&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">cd&lt;/span> /path/to/logs
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> in
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;logs&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="nb">cd&lt;/span> /path/to/logs
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;status&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span> supervisorctl status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;start&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$2&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> in
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;all&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> supervisorctl start redis-server
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;redis&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> supervisorctl start redis-server
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> *&lt;span class="o">)&lt;/span> supervisorctl start &lt;span class="nv">$2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">esac&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;stop&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span> &lt;span class="p">;&amp;amp;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;restart&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">case&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$2&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> in
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="s2">&amp;#34;redis&amp;#34;&lt;/span>&lt;span class="o">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> supervisorctl &lt;span class="nv">$1&lt;/span> redis-server
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> *&lt;span class="o">)&lt;/span> supervisorctl &lt;span class="nv">$1&lt;/span> &lt;span class="nv">$2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">;;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">esac&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">esac&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Now I can type:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">sup status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sup start redis
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sup stop redis
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sup restart redis
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>That&amp;rsquo;s it!&lt;/p></description></item><item><title>Install a specific version of NPM</title><link>https://howto.pandey.me/posts/install-a-specific-version-of-npm/</link><pubDate>Wed, 12 Apr 2023 10:58:05 -0700</pubDate><guid>https://howto.pandey.me/posts/install-a-specific-version-of-npm/</guid><description>&lt;p>I use &lt;a href="https://nvm.sh">nvm&lt;/a> to manage &lt;a href="https://nodejs.org/en">Node.js&lt;/a> versions on my computer and I typically install the latest version of &lt;a href="https://docs.npmjs.com/cli">npm&lt;/a> that is compatible with the Node.js version. This is as simple as:&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-shell" data-lang="shell">&lt;span class="line">&lt;span class="cl">$ nvm install --lts --latest-npm
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">Installing latest LTS version.
 &lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">...

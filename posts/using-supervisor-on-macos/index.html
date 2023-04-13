@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://howto.pandey.me/favicon.ico><link rel=stylesheet href=/css/style.min.css><title>Using Supervisor on macOS</title><script type=text/javascript>(function(e,t,n,s,o,i,a){e[n]=e[n]||function(){(e[n].q=e[n].q||[]).push(arguments)},i=t.createElement(s),i.async=1,i.src="https://www.clarity.ms/tag/"+o,a=t.getElementsByTagName(s)[0],a.parentNode.insertBefore(i,a)})(window,document,"clarity","script","d6qfzorlb9")</script></head><body><header id=banner><h2><a href=https://howto.pandey.me/>How To...</a></h2><nav><ul><li><a href=/ title=posts>posts</a></li><li><a href=/tags title=tags>tags</a></li></ul></nav></header><main id=content><article><header id=post-header><h1>Using Supervisor on macOS</h1><div><time>April 13, 2023</time></div></header><p>When I&rsquo;m working on a project, I often need to run a number of processes, e.g. a frontend app, several backend services, maybe a redis server etc. Instead of running them in Docker containers, or in separate terminal windows, I like to use <a href=http://supervisord.org/>Supervisor</a>. Supervisor is a process control system on UNIX-like OSes, and is easy to use on macOS.</p><h3 id=installation>Installation</h3><p>The simplest option is to use <a href=https://pypi.org/project/pip/>pip</a>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>pip3 install supervisor
+</span></span></code></pre></div><p>Other options for installation are available <a href=http://supervisord.org/installing.html>here</a>.</p><h3 id=creating-a-configuration-file>Creating a Configuration File</h3><p>You can create a sample configuration file using <code>echo_supervisord_conf</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>echo_supervisord_conf &gt; /path/to/supervisord.conf
+</span></span></code></pre></div><p>Customize the file as appropriate. I leave the default sections as-is, just add my programs:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-ini data-lang=ini><span class=line><span class=cl><span class=k>[program:redis-server]</span>
+</span></span><span class=line><span class=cl><span class=na>command</span><span class=o>=</span><span class=s>/path/to/redis-server</span>
+</span></span><span class=line><span class=cl><span class=na>autostart</span><span class=o>=</span><span class=s>false</span>
+</span></span><span class=line><span class=cl><span class=na>autorestart</span><span class=o>=</span><span class=s>true</span>
+</span></span><span class=line><span class=cl><span class=na>stdout_logfile</span><span class=o>=</span><span class=s>/path/to/logs/redis-server.log</span>
+</span></span><span class=line><span class=cl><span class=na>stderr_logfile</span><span class=o>=</span><span class=s>/path/to/logs/redis-server.err.log</span>
+</span></span></code></pre></div><p>Finally, I like to create a symbolic link in <code>/etc/</code> so supervisor can automatically find the file. This is not required, it just saves me from having to type the full path every time.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sudo ln -s /path/to/supervisord.conf /etc/supervisord.conf
+</span></span></code></pre></div><h3 id=running-supervisord>Running supervisord</h3><p>Now we are ready to start the server:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>supervisord
+</span></span></code></pre></div><p>If you didn&rsquo;t create a symlink in one of the default paths where supervisord searches for the config file, you can also specify the config path on the command line:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>supervisord -c /path/to/supervisord.conf
+</span></span></code></pre></div><h3 id=running-supervisorctl>Running supervisorctl</h3><p>You interact with supervisord using <code>supervisorctl</code>:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ supervisorctl status
+</span></span><span class=line><span class=cl>redis-server                     STOPPED   Not started
+</span></span></code></pre></div><p>Or if the config file is not in a standard location:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>$ supervisorctl -c /path/to/supervisord.conf status
+</span></span><span class=line><span class=cl>redis-server                     STOPPED   Not started
+</span></span></code></pre></div><h4 id=managing-the-processes>Managing the processes</h4><p>You can a variety of commands with supervisorctl to manage the processes, including <code>start</code>, <code>stop</code>, <code>restart</code>, <code>status</code> and <code>reload</code>. To get a full list of commands, type:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>supervisorctl <span class=nb>help</span>
+</span></span></code></pre></div><h3 id=creating-an-alias>Creating an alias</h3><p>Finally, I create a helper function to save myself a few keystrokes every time I need to start, stop or restart a process. Something like this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>((</span> <span class=nv>$#</span> <span class=o>==</span> <span class=m>0</span> <span class=o>))</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>cd</span> /path/to/logs
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;logs&#34;</span><span class=o>)</span> <span class=nb>cd</span> /path/to/logs
+</span></span><span class=line><span class=cl>    <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;status&#34;</span><span class=o>)</span> supervisorctl status
+</span></span><span class=line><span class=cl>    <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;start&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;all&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>          supervisorctl start redis-server
+</span></span><span class=line><span class=cl>        <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;redis&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>          supervisorctl start redis-server
+</span></span><span class=line><span class=cl>        <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        *<span class=o>)</span> supervisorctl start <span class=nv>$2</span>
+</span></span><span class=line><span class=cl>        <span class=p>;;</span>
+</span></span><span class=line><span class=cl>      <span class=k>esac</span>
+</span></span><span class=line><span class=cl>      <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;stop&#34;</span><span class=o>)</span> <span class=p>;&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;restart&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>        <span class=s2>&#34;redis&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>          supervisorctl <span class=nv>$1</span> redis-server
+</span></span><span class=line><span class=cl>        <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        *<span class=o>)</span> supervisorctl <span class=nv>$1</span> <span class=nv>$2</span>
+</span></span><span class=line><span class=cl>        <span class=p>;;</span>
+</span></span><span class=line><span class=cl>      <span class=k>esac</span>
+</span></span><span class=line><span class=cl>  <span class=k>esac</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></div><p>Now I can type:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sup status
+</span></span><span class=line><span class=cl>sup start redis
+</span></span><span class=line><span class=cl>sup stop redis
+</span></span><span class=line><span class=cl>sup restart redis
+</span></span></code></pre></div><p>That&rsquo;s it!</p></article></main><footer id=footer>© 2021 Sunil Pandey</footer></body></html>
