@@ -1,0 +1,29 @@
+baseURL = "https://howto.pandey.me/"
+languageCode = "en-us"
+title = "How To..."
+theme = "etch"
+
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+
+[params]
+copyright = "© 2023 Sunil Pandey"
+highlight = true
+clarity_id = "d6qfzorlb9"
+
+[[menu.main]]
+identifier = "posts"
+name = "posts"
+title = "posts"
+url = "/"
+weight = 10
+
+[[menu.main]]
+identifier = "tags"
+name = "tags"
+title = "tags"
+url = "/tags"
+weight = 20
+
+[permalinks]
+posts = "/posts/:title/"
