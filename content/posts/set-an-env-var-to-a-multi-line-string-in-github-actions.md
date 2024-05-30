@@ -2,6 +2,8 @@
 title: "Set an Environment Variable to a Multi-line String in GitHub Actions"
 date: 2024-05-07T18:46:37-07:00
 draft: false
+tags:
+- github
 ---
 
 When creating GitHub Actions workflows, it's often useful to set environment variables to pass info from one step to the next.
