@@ -1,4 +1,49 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zsh on How To...</title><link>https://howto.pandey.me/tags/zsh/</link><description>Recent content in Zsh on How To...</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 22 Apr 2024 08:54:57 -0700</lastBuildDate><atom:link href="https://howto.pandey.me/tags/zsh/index.xml" rel="self" type="application/rss+xml"/><item><title>Use AWS CLI With MFA</title><link>https://howto.pandey.me/posts/use-aws-cli-with-mfa/</link><pubDate>Mon, 23 Sep 2024 23:55:49 -0700</pubDate><guid>https://howto.pandey.me/posts/use-aws-cli-with-mfa/</guid><description>&lt;p>When you have MFA enabled in your AWS account, certain commands may not work with a simple access key and secret key. You need to get a session token and use that instead. Here are the steps to get a session token.&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zsh on How To...</title><link>https://howto.pandey.me/tags/zsh/</link><description>Recent content in Zsh on How To...</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 22 Apr 2024 08:54:57 -0700</lastBuildDate><atom:link href="https://howto.pandey.me/tags/zsh/index.xml" rel="self" type="application/rss+xml"/><item><title>Check if a JSON array in PostgreSQL contains a value</title><link>https://howto.pandey.me/posts/check-if-a-json-array-in-postgresql-contains-a-value/</link><pubDate>Wed, 29 Jan 2025 23:10:19 -0800</pubDate><guid>https://howto.pandey.me/posts/check-if-a-json-array-in-postgresql-contains-a-value/</guid><description>&lt;p>Say you have a table named &lt;code>books&lt;/code>, with a JSON column, &lt;code>metadata&lt;/code>, and within this column, there is an array named &lt;code>tags&lt;/code>.&lt;/p>
+&lt;p>The data in this table might look like this:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>title&lt;/th>
+&lt;th>metadata&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Ready Player One&lt;/td>
+&lt;td>{&amp;ldquo;tags&amp;rdquo;: [&amp;ldquo;sci-fi&amp;rdquo;, &amp;ldquo;gaming&amp;rdquo;]}&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Snow Crash&lt;/td>
+&lt;td>{&amp;ldquo;tags&amp;rdquo;: [&amp;ldquo;sci-fi&amp;rdquo;, &amp;ldquo;cyberpunk&amp;rdquo;]}&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>In Real Life&lt;/td>
+&lt;td>{&amp;ldquo;tags&amp;rdquo;: [&amp;ldquo;graphic novel&amp;rdquo;, &amp;ldquo;gaming&amp;rdquo;]}&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>Now, say you want to find out all the books that have the tag &lt;code>gaming&lt;/code>. You can extract the &lt;code>tags&lt;/code> field using the &lt;code>-&amp;gt;&lt;/code> operator, and check whether or not it contains &lt;code>gaming&lt;/code> using the &lt;code>?&lt;/code> operator.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-sql" data-lang="sql">&lt;span class="line">&lt;span class="cl">&lt;span class="k">SELECT&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">title&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">metadata&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">FROM&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">books&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="k">WHERE&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="n">metadata&lt;/span>&lt;span class="o">-&amp;gt;&lt;/span>&lt;span class="s1">&amp;#39;tags&amp;#39;&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="o">?&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;gaming&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>which will return:&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>title&lt;/th>
+&lt;th>metadata&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Ready Player One&lt;/td>
+&lt;td>{&amp;ldquo;tags&amp;rdquo;: [&amp;ldquo;sci-fi&amp;rdquo;, &amp;ldquo;gaming&amp;rdquo;]}&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>In Real Life&lt;/td>
+&lt;td>{&amp;ldquo;tags&amp;rdquo;: [&amp;ldquo;graphic novel&amp;rdquo;, &amp;ldquo;gaming&amp;rdquo;]}&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>&lt;a href="https://www.postgresql.org/docs/current/functions-json.html">source&lt;/a>&lt;/p></description></item><item><title>Use AWS CLI With MFA</title><link>https://howto.pandey.me/posts/use-aws-cli-with-mfa/</link><pubDate>Mon, 23 Sep 2024 23:55:49 -0700</pubDate><guid>https://howto.pandey.me/posts/use-aws-cli-with-mfa/</guid><description>&lt;p>When you have MFA enabled in your AWS account, certain commands may not work with a simple access key and secret key. You need to get a session token and use that instead. Here are the steps to get a session token.&lt;/p>
 &lt;ol>
 &lt;li>Make sure you AWS CLI installed and configured with your access key and secret key. Following steps assume that these credentials are set as the default profile; if not, then add &lt;code>--profile profile-name&lt;/code> at the end of each command.&lt;/li>
 &lt;li>Find out the ARN of you MFA device.
